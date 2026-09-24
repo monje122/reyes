@@ -1,0 +1,2107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Reyes Burger - Pedidos Online</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --yellow: #FFC107;
+            --yellow-dark: #E5AC00;
+            --red: #D32F2F;
+            --red-dark: #B71C1C;
+            --black: #1a1a1a;
+            --black-light: #2d2d2d;
+            --white: #FFFFFF;
+            --gray: #f5f5f5;
+            --gray-dark: #888;
+            --purple: #9C27B0;
+            --purple-light: #CE93D8;
+            --green: #4CAF50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--black);
+            color: var(--white);
+            min-height: 100vh;
+            padding-bottom: 80px;
+            overflow-x: hidden;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: linear-gradient(135deg, var(--black) 0%, var(--black-light) 100%);
+            padding: 20px 16px 16px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--yellow);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .logo-img {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--yellow);
+            box-shadow: 0 2px 10px rgba(255, 193, 7, 0.3);
+        }
+
+        .logo-text {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 36px;
+            color: var(--yellow);
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .logo-text span { color: var(--red); }
+
+        .header-subtitle {
+            font-size: 12px;
+            color: var(--gray-dark);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* ===== CATEGORY NAV ===== */
+        .category-nav {
+            display: flex;
+            overflow-x: auto;
+            gap: 8px;
+            padding: 12px 16px;
+            background: var(--black-light);
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            position: sticky;
+            top: 95px;
+            z-index: 99;
+            border-bottom: 1px solid #333;
+        }
+
+        .category-nav::-webkit-scrollbar { display: none; }
+
+        .cat-btn {
+            flex-shrink: 0;
+            padding: 8px 18px;
+            border-radius: 25px;
+            border: 2px solid #444;
+            background: transparent;
+            color: var(--white);
+            font-family: 'Poppins', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .cat-btn.active, .cat-btn:hover {
+            background: var(--yellow);
+            color: var(--black);
+            border-color: var(--yellow);
+            transform: scale(1.05);
+        }
+
+        .cat-btn .cat-emoji { margin-right: 4px; }
+
+        /* ===== SECTIONS ===== */
+        .menu-section {
+            padding: 20px 16px 10px;
+            scroll-margin-top: 140px;
+        }
+
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 32px;
+            color: var(--yellow);
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, var(--yellow), transparent);
+        }
+
+        /* ===== MENU CARDS ===== */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .menu-card {
+            background: var(--black-light);
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid #333;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-card:hover {
+            border-color: var(--yellow);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 193, 7, 0.15);
+        }
+
+        .menu-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 6px;
+        }
+
+        .menu-card-name {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--red);
+            line-height: 1.2;
+            flex: 1;
+            padding-right: 10px;
+        }
+
+        .menu-card-price {
+            background: var(--yellow);
+            color: var(--black);
+            font-weight: 800;
+            font-size: 16px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .menu-card-desc {
+            font-size: 12px;
+            color: var(--gray-dark);
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+
+        .menu-card-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .qty-control {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            background: #1a1a1a;
+            border-radius: 25px;
+            overflow: hidden;
+        }
+
+        .qty-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: transparent;
+            color: var(--white);
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .qty-btn:hover {
+            background: var(--yellow);
+            color: var(--black);
+        }
+
+        .qty-btn:active { transform: scale(0.9); }
+
+        .qty-value {
+            width: 30px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--yellow);
+        }
+
+        /* Size selector */
+        .size-selector {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .size-btn {
+            padding: 5px 14px;
+            border-radius: 20px;
+            border: 1px solid #555;
+            background: transparent;
+            color: var(--white);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .size-btn.active {
+            background: var(--red);
+            border-color: var(--red);
+            color: var(--white);
+        }
+
+        /* ===== PAPAS TOGGLE ===== */
+        .papas-toggle {
+            margin-bottom: 10px;
+        }
+
+        .papas-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 12px;
+            border: 1px solid #444;
+            background: rgba(255,193,7,0.05);
+            transition: all 0.2s;
+            width: fit-content;
+        }
+
+        .papas-checkbox:has(input:checked) {
+            border-color: var(--yellow);
+            background: rgba(255,193,7,0.15);
+        }
+
+        .papas-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--yellow);
+            cursor: pointer;
+        }
+
+        .papas-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .papas-price {
+            font-size: 11px;
+            color: var(--yellow);
+            font-weight: 700;
+        }
+
+        /* ===== SMOOTHIE SECTION ===== */
+        .smoothie-section .menu-card {
+            border-color: var(--purple);
+            background: linear-gradient(135deg, #2d1533 0%, var(--black-light) 100%);
+        }
+
+        .smoothie-section .section-title { color: var(--purple-light); }
+        .smoothie-section .section-title::after { background: linear-gradient(90deg, var(--purple-light), transparent); }
+        .smoothie-section .menu-card-name { color: var(--purple-light); }
+        .smoothie-section .menu-card-price { background: var(--purple); color: var(--white); }
+        .smoothie-section .qty-value { color: var(--purple-light); }
+
+        /* ===== FLOATING CART ===== */
+        .cart-float {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, var(--red-dark) 0%, var(--red) 100%);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 200;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .cart-float.visible { transform: translateY(0); }
+
+        .cart-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-badge {
+            background: var(--yellow);
+            color: var(--black);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+        }
+
+        .cart-text { font-size: 14px; font-weight: 600; }
+        .cart-total { font-size: 18px; font-weight: 800; color: var(--yellow); }
+
+        .cart-view-btn {
+            background: var(--yellow);
+            color: var(--black);
+            border: none;
+            padding: 10px 24px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.2s;
+        }
+
+        .cart-view-btn:active { transform: scale(0.95); }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 300;
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .modal-overlay.open { display: flex; }
+
+        .modal {
+            background: var(--black-light);
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            border-radius: 24px 24px 0 0;
+            overflow-y: auto;
+            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #444;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: var(--black-light);
+            z-index: 5;
+        }
+
+        .modal-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            color: var(--yellow);
+            letter-spacing: 2px;
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: #444;
+            color: var(--white);
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-body { padding: 16px 20px; }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .cart-item-info { flex: 1; }
+        .cart-item-name { font-weight: 600; font-size: 14px; color: var(--white); }
+        .cart-item-detail { font-size: 11px; color: var(--gray-dark); }
+
+        .cart-item-price {
+            font-weight: 700;
+            color: var(--yellow);
+            font-size: 15px;
+            margin: 0 12px;
+            white-space: nowrap;
+        }
+
+        .cart-item-remove {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background: var(--red);
+            color: var(--white);
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ===== DELIVERY OPTIONS ===== */
+        .delivery-section { padding: 16px 0; border-top: 1px solid #444; margin-top: 8px; }
+        .delivery-label { font-weight: 700; font-size: 14px; margin-bottom: 10px; color: var(--yellow); }
+
+        .delivery-options { display: flex; gap: 10px; }
+
+        .delivery-option {
+            flex: 1;
+            padding: 14px;
+            border-radius: 14px;
+            border: 2px solid #444;
+            background: transparent;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .delivery-option.selected {
+            border-color: var(--yellow);
+            background: rgba(255, 193, 7, 0.1);
+        }
+
+        .delivery-option-icon { font-size: 28px; display: block; margin-bottom: 4px; }
+        .delivery-option-text { font-size: 13px; font-weight: 700; color: var(--white); }
+        .delivery-option-price { font-size: 11px; color: var(--gray-dark); margin-top: 2px; }
+
+        .zone-section { margin-top: 12px; display: none; }
+        .zone-section.visible { display: block; }
+        .zone-label { font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 8px; }
+
+        .zone-select {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 2px solid #444;
+            background: var(--black);
+            color: var(--white);
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%23FFC107'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            cursor: pointer;
+        }
+
+        .zone-select:focus { outline: none; border-color: var(--yellow); }
+
+        .customer-section { padding: 16px 0; border-top: 1px solid #444; }
+        .customer-label { font-weight: 700; font-size: 14px; margin-bottom: 10px; color: var(--yellow); }
+        .input-group { margin-bottom: 10px; }
+        .input-group label { font-size: 12px; color: var(--gray-dark); display: block; margin-bottom: 4px; }
+
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 2px solid #444;
+            background: var(--black);
+            color: var(--white);
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .input-group input:focus, .input-group textarea:focus { outline: none; border-color: var(--yellow); }
+        .input-group textarea { resize: none; height: 60px; }
+
+        .order-summary { padding: 16px 0; border-top: 1px solid #444; }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 14px;
+        }
+
+        .summary-row.total {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--yellow);
+            padding-top: 10px;
+            border-top: 2px solid var(--yellow);
+            margin-top: 6px;
+        }
+
+        .send-whatsapp-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: var(--white);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 16px 0 20px;
+            transition: all 0.2s;
+        }
+
+        .send-whatsapp-btn:active { transform: scale(0.97); }
+        .send-whatsapp-btn svg { width: 24px; height: 24px; fill: white; }
+
+        .promo-banner {
+            margin: 16px;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%);
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .promo-banner h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 22px;
+            color: var(--yellow);
+            letter-spacing: 2px;
+        }
+
+        .promo-banner p { font-size: 12px; color: rgba(255,255,255,0.8); margin-top: 4px; }
+
+        .empty-cart { text-align: center; padding: 40px 20px; }
+        .empty-cart-icon { font-size: 60px; margin-bottom: 12px; }
+        .empty-cart-text { color: var(--gray-dark); font-size: 14px; }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: var(--green);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 500;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        @media (min-width: 480px) {
+            .menu-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (min-width: 768px) {
+            .menu-grid { grid-template-columns: 1fr 1fr 1fr; }
+            body { max-width: 800px; margin: 0 auto; }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .bounce { animation: bounce 0.3s ease; }
+
+        /* ===== BANNER CAROUSEL ===== */
+        .banner-carousel {
+            margin: 16px;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            aspect-ratio: 16 / 9;
+            background: var(--black-light);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            border: 2px solid #333;
+        }
+
+        .banner-track {
+            display: flex;
+            width: 400%;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .banner-slide {
+            width: 25%;
+            height: 100%;
+            flex-shrink: 0;
+        }
+
+        .banner-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .banner-dots {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 5;
+        }
+
+        .banner-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.4);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 0;
+        }
+
+        .banner-dot.active {
+            background: var(--yellow);
+            transform: scale(1.3);
+            box-shadow: 0 0 8px rgba(255, 193, 7, 0.6);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="logo-container">
+            <img src="logo.jpg" alt="Reyes Burger" class="logo-img">
+            <h1 class="logo-text">REYES <span>BURGER</span></h1>
+        </div>
+        <p class="header-subtitle">Pedidos Online • Delivery & Pick Up</p>
+    </header>
+
+    <!-- CATEGORY NAV -->
+    <nav class="category-nav" id="categoryNav">
+        <button class="cat-btn active" data-cat="all"><span class="cat-emoji">📋</span>Todo</button>
+        <button class="cat-btn" data-cat="hamburguesas"><span class="cat-emoji">🍔</span>Hamburguesas</button>
+        <button class="cat-btn" data-cat="perros"><span class="cat-emoji">🌭</span>Perros</button>
+        <button class="cat-btn" data-cat="pepitos"><span class="cat-emoji">🥖</span>Pepitos</button>
+        <button class="cat-btn" data-cat="papas"><span class="cat-emoji">🍟</span>Papas</button>
+        <button class="cat-btn" data-cat="otros"><span class="cat-emoji">🍗</span>Otros</button>
+        <button class="cat-btn" data-cat="combos"><span class="cat-emoji">🎉</span>Combos</button>
+        <button class="cat-btn" data-cat="bebidas"><span class="cat-emoji">🥤</span>Bebidas</button>
+        <button class="cat-btn" data-cat="batidos"><span class="cat-emoji">🧃</span>Batidos</button>
+        <button class="cat-btn" data-cat="barquillas"><span class="cat-emoji">🍦</span>Helados</button>
+    </nav>
+
+    <!-- PROMO BANNER -->
+    <div class="promo-banner">
+        <h3>🔥 ¡BIENVENIDO A REYES BURGER! 🔥</h3>
+        <p>Selecciona tus productos, elige Delivery o Pick Up y envía tu pedido por WhatsApp</p>
+    </div>
+
+    <!-- BANNER CAROUSEL -->
+    <div class="banner-carousel" id="bannerCarousel">
+        <div class="banner-track" id="bannerTrack">
+            <div class="banner-slide"><img src="banner1.jpg" alt="Promo Reyes Burger"></div>
+            <div class="banner-slide"><img src="banner2.jpg" alt="Hamburguesa Reyes Burger"></div>
+            <div class="banner-slide"><img src="banner3.jpg" alt="Delivery Reyes Burger"></div>
+            <div class="banner-slide"><img src="banner4.jpg" alt="Sabor digno de Reyes"></div>
+        </div>
+        <div class="banner-dots">
+            <button class="banner-dot active" onclick="goToSlide(0)"></button>
+            <button class="banner-dot" onclick="goToSlide(1)"></button>
+            <button class="banner-dot" onclick="goToSlide(2)"></button>
+            <button class="banner-dot" onclick="goToSlide(3)"></button>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- =================== HAMBURGUESAS =========================== -->
+    <!-- ============================================================ -->
+    <section class="menu-section" id="sec-hamburguesas" data-category="hamburguesas">
+        <h2 class="section-title">🍔 Hamburguesas</h2>
+        <div class="menu-grid">
+
+            <!-- Rey o Reina Clásica -->
+            <div class="menu-card burger-card" data-id="burger-clasica" data-name="Rey o Reina Clásica" data-price="3.5"
+                 data-burger='{"sencilla":3.5,"sencilla_papas":5,"doble":4.5,"doble_papas":5.5,"triple":6,"triple_papas":7.5}'>
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Rey o Reina Clásica</span>
+                    <span class="menu-card-price">$3.50</span>
+                </div>
+                <p class="menu-card-desc">Pan Brioche, carne o pollo, chuleta, tocineta, pepinillo, tomate, cebolla, lechuga y aderezo rey.</p>
+                <div class="size-selector">
+                    <button class="size-btn active" onclick="selectBurgerSize(this,'sencilla')">Sencilla</button>
+                    <button class="size-btn" onclick="selectBurgerSize(this,'doble')">Doble</button>
+                    <button class="size-btn" onclick="selectBurgerSize(this,'triple')">Triple</button>
+                </div>
+                <div class="papas-toggle">
+                    <label class="papas-checkbox">
+                        <input type="checkbox" onchange="togglePapas(this)">
+                        <span class="papas-label">🍟 Con Papas</span>
+                    </label>
+                </div>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hamburguesa Especial -->
+            <div class="menu-card burger-card" data-id="burger-especial" data-name="Hamburguesa Especial" data-price="5"
+                 data-burger='{"sencilla":5,"sencilla_papas":7,"doble":6.5,"doble_papas":8,"triple":7.5,"triple_papas":8.5}'>
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Hamburguesa Especial</span>
+                    <span class="menu-card-price">$5</span>
+                </div>
+                <p class="menu-card-desc">Pan Bimbo, carne, pollo, chuleta, pepinillo, tomate, cebolla, lechuga, huevo y aderezo rey.</p>
+                <div class="size-selector">
+                    <button class="size-btn active" onclick="selectBurgerSize(this,'sencilla')">Sencilla</button>
+                    <button class="size-btn" onclick="selectBurgerSize(this,'doble')">Doble</button>
+                    <button class="size-btn" onclick="selectBurgerSize(this,'triple')">Triple</button>
+                </div>
+                <div class="papas-toggle">
+                    <label class="papas-checkbox">
+                        <input type="checkbox" onchange="togglePapas(this)">
+                        <span class="papas-label">🍟 Con Papas</span>
+                    </label>
+                </div>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tociburguer -->
+            <div class="menu-card burger-card" data-id="burger-toci" data-name="Tociburguer" data-price="3.5"
+                 data-burger='{"sencilla":3.5,"sencilla_papas":4.5,"doble":5,"doble_papas":6,"triple":6.5,"triple_papas":7.5}'>
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Tociburguer</span>
+                    <span class="menu-card-price">$3.50</span>
+                </div>
+                <p class="menu-card-desc">Pan Brioche, queso americano, pepinillo y aderezo rey.</p>
+                <div class="size-selector">
+                    <button class="size-btn active" onclick="selectBurgerSize(this,'sencilla')">Sencilla</button>
+                    <button class="size-btn" onclick="selectBurgerSize(this,'doble')">Doble</button>
+                    <button class="size-btn" onclick="selectBurgerSize(this,'triple')">Triple</button>
+                </div>
+                <div class="papas-toggle">
+                    <label class="papas-checkbox">
+                        <input type="checkbox" onchange="togglePapas(this)">
+                        <span class="papas-label">🍟 Con Papas</span>
+                    </label>
+                </div>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sweet Onion o Crispy Onion -->
+            <div class="menu-card burger-card" data-id="burger-sweet-onion" data-name="Sweet Onion / Crispy Onion" data-price="4"
+                 data-burger='{"sencilla":4,"sencilla_papas":5,"doble":5.5,"doble_papas":6.5,"triple":6.5,"triple_papas":7.5}'>
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Sweet Onion / Crispy Onion</span>
+                    <span class="menu-card-price">$4</span>
+                </div>
+                <p class="menu-card-desc">Pan Brioche, carne, pollo, chuleta, queso, crema, cebolla crispy o caramelizada, tocineta y queso fundido.</p>
+                <div class="size-selector">
+                    <button class="size-btn active" onclick="selectBurgerSize(this,'sencilla')">Sencilla</button>
+                    <button class="size-btn" onclick="selectBurgerSize(this,'doble')">Doble</button>
+                    <button class="size-btn" onclick="selectBurgerSize(this,'triple')">Triple</button>
+                </div>
+                <div class="papas-toggle">
+                    <label class="papas-checkbox">
+                        <input type="checkbox" onchange="togglePapas(this)">
+                        <span class="papas-label">🍟 Con Papas</span>
+                    </label>
+                </div>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reina Cesar -->
+            <div class="menu-card burger-card" data-id="burger-cesar" data-name="Reina Cesar" data-price="4"
+                 data-burger='{"sencilla":4,"sencilla_papas":5,"doble":5,"doble_papas":6,"triple":6.5,"triple_papas":7.5}'>
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Reina Cesar</span>
+                    <span class="menu-card-price">$4</span>
+                </div>
+                <p class="menu-card-desc">Pan Bimbo o Brioche, proteína crispy, tocineta, aderezo cesar y queso crema.</p>
+                <div class="size-selector">
+                    <button class="size-btn active" onclick="selectBurgerSize(this,'sencilla')">Sencilla</button>
+                    <button class="size-btn" onclick="selectBurgerSize(this,'doble')">Doble</button>
+                    <button class="size-btn" onclick="selectBurgerSize(this,'triple')">Triple</button>
+                </div>
+                <div class="papas-toggle">
+                    <label class="papas-checkbox">
+                        <input type="checkbox" onchange="togglePapas(this)">
+                        <span class="papas-label">🍟 Con Papas</span>
+                    </label>
+                </div>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Callejera -->
+            <div class="menu-card burger-card" data-id="burger-callejera" data-name="Callejera" data-price="4"
+                 data-burger='{"sencilla":4,"sencilla_papas":5,"doble":5.5,"doble_papas":7,"triple":6.5,"triple_papas":8}'>
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Callejera</span>
+                    <span class="menu-card-price">$4</span>
+                </div>
+                <p class="menu-card-desc">Pan Bimbo, proteína (carne, pollo o chuleta), tomate, cebolla, lechuga, tocineta, maíz, huevo y salsas (roja, blanca, mostaza, ajo).</p>
+                <div class="size-selector">
+                    <button class="size-btn active" onclick="selectBurgerSize(this,'sencilla')">Sencilla</button>
+                    <button class="size-btn" onclick="selectBurgerSize(this,'doble')">Doble</button>
+                    <button class="size-btn" onclick="selectBurgerSize(this,'triple')">Triple</button>
+                </div>
+                <div class="papas-toggle">
+                    <label class="papas-checkbox">
+                        <input type="checkbox" onchange="togglePapas(this)">
+                        <span class="papas-label">🍟 Con Papas</span>
+                    </label>
+                </div>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reina Nueva -->
+            <div class="menu-card burger-card" data-id="burger-reina-nueva" data-name="Reina Nueva" data-price="4.5"
+                 data-burger='{"sencilla":4.5,"sencilla_papas":5.5,"doble":5.5,"doble_papas":6.5,"triple":6.5,"triple_papas":7.5}'>
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Reina Nueva</span>
+                    <span class="menu-card-price">$4.50</span>
+                </div>
+                <p class="menu-card-desc">Carne o pollo, tomate, cebolla, lechuga, queso amarillo, tocineta, tajada y queso crema.</p>
+                <div class="size-selector">
+                    <button class="size-btn active" onclick="selectBurgerSize(this,'sencilla')">Sencilla</button>
+                    <button class="size-btn" onclick="selectBurgerSize(this,'doble')">Doble</button>
+                    <button class="size-btn" onclick="selectBurgerSize(this,'triple')">Triple</button>
+                </div>
+                <div class="papas-toggle">
+                    <label class="papas-checkbox">
+                        <input type="checkbox" onchange="togglePapas(this)">
+                        <span class="papas-label">🍟 Con Papas</span>
+                    </label>
+                </div>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Big Rey -->
+            <div class="menu-card burger-card" data-id="burger-big-rey" data-name="Big Rey" data-price="5"
+                 data-burger='{"doble":5,"doble_papas":6.5}'>
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Big Rey 👑</span>
+                    <span class="menu-card-price">$5</span>
+                </div>
+                <p class="menu-card-desc">Doble carne, triple pan brioche, doble pepinillo, aderezo de tocineta y queso crema.</p>
+                <div class="size-selector">
+                    <button class="size-btn active" onclick="selectBurgerSize(this,'doble')">Doble</button>
+                </div>
+                <div class="papas-toggle">
+                    <label class="papas-checkbox">
+                        <input type="checkbox" onchange="togglePapas(this)">
+                        <span class="papas-label">🍟 Con Papas</span>
+                    </label>
+                </div>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- =================== PERROS CALIENTES ======================= -->
+    <!-- ============================================================ -->
+    <section class="menu-section" id="sec-perros" data-category="perros">
+        <h2 class="section-title">🌭 Perros Calientes</h2>
+        <div class="menu-grid">
+            <div class="menu-card" data-id="perro-clasico" data-name="Perro Rey Clásico" data-price="1">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Perro Rey Clásico</span>
+                    <span class="menu-card-price">$1</span>
+                </div>
+                <p class="menu-card-desc">Salchicha, ketchup, mayonesa, repollo y papas.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="perro-especial" data-name="Perro Rey Especial" data-price="1.5">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Perro Rey Especial</span>
+                    <span class="menu-card-price">$1.50</span>
+                </div>
+                <p class="menu-card-desc">Salchicha, ketchup, mayonesa, ensalada, repollo, papas, aderezo rey, queso amarillo y maíz.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="perro-super" data-name="Perro Rey Super" data-price="1.5">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Perro Rey Super</span>
+                    <span class="menu-card-price">$1.50</span>
+                </div>
+                <p class="menu-card-desc">Salchicha, ketchup, mayonesa, ensalada, repollo, papas, aderezo rey, queso de año y tocineta.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="perro-super-especial" data-name="Perro Rey Super Especial" data-price="2">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Perro Rey Super Especial</span>
+                    <span class="menu-card-price">$2</span>
+                </div>
+                <p class="menu-card-desc">Salchicha, ketchup, mayonesa, ensalada, repollo, papas, aderezo rey, queso amarillo, tocineta y maíz.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PEPITOS -->
+    <section class="menu-section" id="sec-pepitos" data-category="pepitos">
+        <h2 class="section-title">🥖 Pepitos</h2>
+        <div class="menu-grid">
+            <div class="menu-card" data-id="mini-pepito" data-name="Mini Pepito con Papas" data-price="5">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Mini Pepito con Papas</span>
+                    <span class="menu-card-price">$5</span>
+                </div>
+                <p class="menu-card-desc">Carne, pollo, tocineta, queso amarillo y vegetales (tomate, cebolla, lechuga), papas fritas, maíz entero y salsas.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="pepito-especial" data-name="Pepito Especial con Papas" data-price="6">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Pepito Especial con Papas</span>
+                    <span class="menu-card-price">$6</span>
+                </div>
+                <p class="menu-card-desc">Pepito especial con papas fritas y todos los ingredientes premium.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAPAS -->
+    <section class="menu-section" id="sec-papas" data-category="papas">
+        <h2 class="section-title">🍟 Papas</h2>
+        <div class="menu-grid">
+            <div class="menu-card" data-id="salchipapa" data-name="Salchipapa" data-price="6">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Salchipapa</span>
+                    <span class="menu-card-price">$6</span>
+                </div>
+                <p class="menu-card-desc">350gr de papas + salchichas + queso fundido.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="papas-fritas" data-name="Papas Fritas" data-price="2.5">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Papas Fritas</span>
+                    <span class="menu-card-price">$2.50</span>
+                </div>
+                <p class="menu-card-desc">200gr de papas fritas crujientes.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="tocipapa" data-name="Tocipapa" data-price="6">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Tocipapa</span>
+                    <span class="menu-card-price">$6</span>
+                </div>
+                <p class="menu-card-desc">350gr de papas + tocineta + queso fundido.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- OTROS -->
+    <section class="menu-section" id="sec-otros" data-category="otros">
+        <h2 class="section-title">🍗 Otros</h2>
+        <div class="menu-grid">
+            <div class="menu-card" data-id="granjero" data-name="Granjero" data-price="5">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Granjero</span>
+                    <span class="menu-card-price">$5</span>
+                </div>
+                <p class="menu-card-desc">Pollo milanesa o crispy, queso amarillo, tocineta, vegetales (tomate, lechuga) y salsas.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="burrito" data-name="Burrito" data-price="6">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Burrito</span>
+                    <span class="menu-card-price">$6</span>
+                </div>
+                <p class="menu-card-desc">Pollo, carne, queso amarillo, tocineta, vegetales (tomate, cebolla, pepinillo) y salsas.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="club-house" data-name="Club House" data-price="6">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Club House</span>
+                    <span class="menu-card-price">$6</span>
+                </div>
+                <p class="menu-card-desc">Pollo o carne, tocineta, jamón, queso amarillo, vegetales, salsas, 2 tequeños y 100gr de papas.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="club-house-familiar" data-name="Club House Familiar" data-price="10">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Club House Familiar</span>
+                    <span class="menu-card-price">$10</span>
+                </div>
+                <p class="menu-card-desc">Mixto: jamón, queso, carne y pollo, tocineta, vegetales, salsa al gusto, 5 tequeños, 200gr de papas.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="tequenos-10" data-name="Tequeños (10 Unid)" data-price="3">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Tequeños (10 Unid)</span>
+                    <span class="menu-card-price">$3</span>
+                </div>
+                <p class="menu-card-desc">10 unidades de tequeños crujientes.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="tequenos-25" data-name="Tequeños (25 Unid)" data-price="6">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Tequeños (25 Unid)</span>
+                    <span class="menu-card-price">$6</span>
+                </div>
+                <p class="menu-card-desc">25 unidades de tequeños crujientes.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMBOS -->
+    <section class="menu-section" id="sec-combos" data-category="combos">
+        <h2 class="section-title">🎉 Combos</h2>
+        <div class="menu-grid">
+            <div class="menu-card" data-id="combo-perrito-reyes" data-name="Combo Perrito Reyes" data-price="15">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Perrito Reyes</span>
+                    <span class="menu-card-price">$15</span>
+                </div>
+                <p class="menu-card-desc">6 perros con queso, 100gr de papas, 5 tequeños, bebida litro y medio.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="combo-perrito-rey" data-name="Combo Perrito Rey" data-price="15">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Perrito Rey</span>
+                    <span class="menu-card-price">$15</span>
+                </div>
+                <p class="menu-card-desc">10 perros grandes con queso, 1 bebida de litro.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="combo-reyes-mixto" data-name="Combo Reyes Mixto" data-price="15">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Combo Reyes Mixto</span>
+                    <span class="menu-card-price">$15</span>
+                </div>
+                <p class="menu-card-desc">3 perros grandes con queso, 2 hamburguesas rey o niña, tequeños, 100gr de papas, bebida de litro.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="combo-clasica-reyes" data-name="Combo Clásica Reyes" data-price="15">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Clásica Reyes</span>
+                    <span class="menu-card-price">$15</span>
+                </div>
+                <p class="menu-card-desc">4 hamburguesas clásicas, 5 tequeños, 100gr de papas.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="combo-reina-especial" data-name="Combo Reina Especial" data-price="15">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Combo Reina Especial</span>
+                    <span class="menu-card-price">$15</span>
+                </div>
+                <p class="menu-card-desc">2 hamburguesas especiales carne o pollo, toditos + papas.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="combo-burger-mixto" data-name="Combo Burger Mixto" data-price="25">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Combo Burger Mixto</span>
+                    <span class="menu-card-price">$25</span>
+                </div>
+                <p class="menu-card-desc">5 perros grandes con queso, 3 hamburguesas rey o niña clásicas, 100gr de papas, 10 tequeños, bebida de litro y medio.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BEBIDAS -->
+    <section class="menu-section" id="sec-bebidas" data-category="bebidas">
+        <h2 class="section-title">🥤 Bebidas</h2>
+        <div class="menu-grid">
+            <div class="menu-card" data-id="bebida-peq" data-name="Bebida Peq o Vaso" data-price="1">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Bebida Peq o Vaso</span>
+                    <span class="menu-card-price">$1</span>
+                </div>
+                <p class="menu-card-desc">Bebida pequeña o vaso.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="refresco-1lt" data-name="Refresco 1 Lt" data-price="2.5">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Refresco 1 Lt</span>
+                    <span class="menu-card-price">$2.50</span>
+                </div>
+                <p class="menu-card-desc">Refresco de 1 litro.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="refresco-1-5lt" data-name="Refresco 1½ Lt" data-price="3">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Refresco 1½ Lt</span>
+                    <span class="menu-card-price">$3</span>
+                </div>
+                <p class="menu-card-desc">Refresco de litro y medio.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="refresco-2lt" data-name="Refresco 2 Lt" data-price="3">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Refresco 2 Lt</span>
+                    <span class="menu-card-price">$3</span>
+                </div>
+                <p class="menu-card-desc">Refresco de 2 litros.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="nestle-med" data-name="Nestlé Mediano" data-price="1.5">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Nestlé Mediano</span>
+                    <span class="menu-card-price">$1.50</span>
+                </div>
+                <p class="menu-card-desc">Agua Nestlé tamaño mediano.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="nestle-gde" data-name="Nestlé Grande" data-price="2">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Nestlé Grande</span>
+                    <span class="menu-card-price">$2</span>
+                </div>
+                <p class="menu-card-desc">Agua Nestlé tamaño grande.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BATIDOS & MERENGADAS -->
+    <section class="menu-section smoothie-section" id="sec-batidos" data-category="batidos">
+        <h2 class="section-title">🥤 Batidos & Merengadas</h2>
+        <div class="menu-grid">
+            <div class="menu-card" data-id="batido-fresa" data-name="Batido de Fresa" data-price="1.5">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Batido de Fresa</span>
+                    <span class="menu-card-price">$1.50</span>
+                </div>
+                <div class="size-selector">
+                    <button class="size-btn active" onclick="selectSize(this,1.5)">Med $1.50</button>
+                    <button class="size-btn" onclick="selectSize(this,2)">Gde $2</button>
+                </div>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="batido-mora" data-name="Batido de Mora" data-price="1.5">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Batido de Mora</span>
+                    <span class="menu-card-price">$1.50</span>
+                </div>
+                <div class="size-selector">
+                    <button class="size-btn active" onclick="selectSize(this,1.5)">Med $1.50</button>
+                    <button class="size-btn" onclick="selectSize(this,2)">Gde $2</button>
+                </div>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="batido-parchita" data-name="Batido de Parchita" data-price="1.5">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Batido de Parchita</span>
+                    <span class="menu-card-price">$1.50</span>
+                </div>
+                <div class="size-selector">
+                    <button class="size-btn active" onclick="selectSize(this,1.5)">Med $1.50</button>
+                    <button class="size-btn" onclick="selectSize(this,2)">Gde $2</button>
+                </div>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="batido-limon" data-name="Batido de Limón" data-price="1.5">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Batido de Limón</span>
+                    <span class="menu-card-price">$1.50</span>
+                </div>
+                <div class="size-selector">
+                    <button class="size-btn active" onclick="selectSize(this,1.5)">Med $1.50</button>
+                    <button class="size-btn" onclick="selectSize(this,2)">Gde $2</button>
+                </div>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="batido-pina" data-name="Batido de Piña" data-price="1.5">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Batido de Piña</span>
+                    <span class="menu-card-price">$1.50</span>
+                </div>
+                <div class="size-selector">
+                    <button class="size-btn active" onclick="selectSize(this,1.5)">Med $1.50</button>
+                    <button class="size-btn" onclick="selectSize(this,2)">Gde $2</button>
+                </div>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MERENGADAS -->
+            <div class="menu-card" data-id="merengada-fresa" data-name="Merengada Fresa c/Leche" data-price="2">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Merengada Fresa c/Leche</span>
+                    <span class="menu-card-price">$2</span>
+                </div>
+                <div class="size-selector">
+                    <button class="size-btn active" onclick="selectSize(this,2)">Med $2</button>
+                    <button class="size-btn" onclick="selectSize(this,2.5)">Gde $2.50</button>
+                </div>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="merengada-mora" data-name="Merengada Mora c/Leche" data-price="2">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Merengada Mora c/Leche</span>
+                    <span class="menu-card-price">$2</span>
+                </div>
+                <div class="size-selector">
+                    <button class="size-btn active" onclick="selectSize(this,2)">Med $2</button>
+                    <button class="size-btn" onclick="selectSize(this,2.5)">Gde $2.50</button>
+                </div>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="merengada-pina" data-name="Merengada Piña c/Leche" data-price="2">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Merengada Piña c/Leche</span>
+                    <span class="menu-card-price">$2</span>
+                </div>
+                <div class="size-selector">
+                    <button class="size-btn active" onclick="selectSize(this,2)">Med $2</button>
+                    <button class="size-btn" onclick="selectSize(this,2.5)">Gde $2.50</button>
+                </div>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="merengada-tody" data-name="Merengada Tody" data-price="2">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Merengada Tody</span>
+                    <span class="menu-card-price">$2</span>
+                </div>
+                <div class="size-selector">
+                    <button class="size-btn active" onclick="selectSize(this,2)">Med $2</button>
+                    <button class="size-btn" onclick="selectSize(this,2.5)">Gde $2.50</button>
+                </div>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="merengada-cereal" data-name="Merengada Cereal c/Fresa" data-price="2">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Merengada Cereal c/Fresa</span>
+                    <span class="menu-card-price">$2</span>
+                </div>
+                <div class="size-selector">
+                    <button class="size-btn active" onclick="selectSize(this,2)">Med $2</button>
+                    <button class="size-btn" onclick="selectSize(this,2.5)">Gde $2.50</button>
+                </div>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ESPECIALES -->
+            <div class="menu-card" data-id="especial-cocossete" data-name="Especial Cocossete" data-price="3">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Especial Cocossete</span>
+                    <span class="menu-card-price">$3</span>
+                </div>
+                <p class="menu-card-desc">Merengada especial de Cocossete.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="especial-samba" data-name="Especial Samba" data-price="3">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Especial Samba</span>
+                    <span class="menu-card-price">$3</span>
+                </div>
+                <p class="menu-card-desc">Merengada especial de Samba.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="especial-chocolate" data-name="Especial Chocolate Intenso" data-price="3">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Especial Chocolate Intenso</span>
+                    <span class="menu-card-price">$3</span>
+                </div>
+                <p class="menu-card-desc">Merengada especial de Chocolate intenso.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="especial-yogurt" data-name="Especial Yogurt Grande" data-price="3">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Especial Yogurt Grande</span>
+                    <span class="menu-card-price">$3</span>
+                </div>
+                <p class="menu-card-desc">Merengada especial de Yogurt grande.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BARQUILLAS -->
+    <section class="menu-section smoothie-section" id="sec-barquillas" data-category="barquillas">
+        <h2 class="section-title">🍦 Barquillas & Helados</h2>
+        <div class="menu-grid">
+            <div class="menu-card" data-id="barquilla-1" data-name="Barquilla 1 Sabor" data-price="1">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Barquilla 1 Sabor</span>
+                    <span class="menu-card-price">$1</span>
+                </div>
+                <p class="menu-card-desc">Barquilla con 1 sabor a elegir.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="barquilla-2" data-name="Barquilla 2 Sabores" data-price="1.5">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Barquilla 2 Sabores</span>
+                    <span class="menu-card-price">$1.50</span>
+                </div>
+                <p class="menu-card-desc">Barquilla con 2 sabores a elegir.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="tina-2" data-name="Tina 2 Sabores" data-price="2">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Tina 2 Sabores</span>
+                    <span class="menu-card-price">$2</span>
+                </div>
+                <p class="menu-card-desc">Tina de helado con 2 sabores a elegir.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card" data-id="tina-3" data-name="Tina 3 Sabores" data-price="2.5">
+                <div class="menu-card-header">
+                    <span class="menu-card-name">Tina 3 Sabores</span>
+                    <span class="menu-card-price">$2.50</span>
+                </div>
+                <p class="menu-card-desc">Tina de helado con 3 sabores a elegir.</p>
+                <div class="menu-card-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                        <span class="qty-value">0</span>
+                        <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FLOATING CART BAR ===== -->
+    <div class="cart-float" id="cartFloat">
+        <div class="cart-info">
+            <div class="cart-badge" id="cartBadge">0</div>
+            <div>
+                <div class="cart-text">Tu Pedido</div>
+                <div class="cart-total" id="cartTotal">$0.00</div>
+            </div>
+        </div>
+        <button class="cart-view-btn" onclick="openCart()">Ver Pedido 📋</button>
+    </div>
+
+    <!-- ===== CART MODAL ===== -->
+    <div class="modal-overlay" id="cartModal">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="modal-title">📋 Tu Pedido</span>
+                <button class="modal-close" onclick="closeCart()">✕</button>
+            </div>
+            <div class="modal-body" id="cartModalBody"></div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">✅ Agregado al pedido</div>
+
+    <script>
+        // ===== STATE =====
+        let cart = {};
+        let deliveryMode = 'pickup';
+        let selectedZone = '';
+
+        const DELIVERY_ZONES = {
+            'zona1': { name: 'Zona 1 - Cercana', price: 1.5 },
+            'zona2': { name: 'Zona 2 - Intermedia', price: 2 },
+            'zona3': { name: 'Zona 3 - Lejana', price: 3 },
+        };
+
+        const WHATSAPP_NUMBER = '584123714136';
+
+        // ===== SIZE SELECTOR (Batidos/Merengadas) =====
+        function selectSize(btn, price) {
+            const card = btn.closest('.menu-card');
+            card.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            card.dataset.price = price;
+            card.querySelector('.menu-card-price').textContent = '$' + price.toFixed(2);
+            const id = card.dataset.id;
+            const sizeText = btn.textContent.split(' ')[0];
+            card.dataset.selectedSize = sizeText;
+            if (cart[id]) {
+                cart[id].price = price;
+                cart[id].size = sizeText;
+                updateCartUI();
+            }
+        }
+
+        // ===== BURGER SIZE SELECTOR =====
+        function selectBurgerSize(btn, sizeKey) {
+            const card = btn.closest('.menu-card');
+            card.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            card.dataset.selectedBurgerSize = sizeKey;
+            updateBurgerPrice(card);
+        }
+
+        // ===== PAPAS TOGGLE =====
+        function togglePapas(checkbox) {
+            const card = checkbox.closest('.menu-card');
+            updateBurgerPrice(card);
+        }
+
+        // ===== UPDATE BURGER PRICE =====
+        function updateBurgerPrice(card) {
+            const burgerData = JSON.parse(card.dataset.burger);
+            const sizeKey = card.dataset.selectedBurgerSize || 'sencilla';
+            const papasCheckbox = card.querySelector('.papas-checkbox input');
+            const hasPapas = papasCheckbox ? papasCheckbox.checked : false;
+
+            const priceKey = hasPapas ? sizeKey + '_papas' : sizeKey;
+            const price = burgerData[priceKey] || burgerData[sizeKey] || 0;
+
+            card.dataset.price = price;
+            card.querySelector('.menu-card-price').textContent = '$' + price.toFixed(2);
+
+            const id = card.dataset.id;
+            if (cart[id]) {
+                const sizeLabel = sizeKey.charAt(0).toUpperCase() + sizeKey.slice(1);
+                cart[id].price = price;
+                cart[id].size = sizeLabel + (hasPapas ? ' + Papas' : '');
+                updateCartUI();
+            }
+        }
+
+        // ===== QUANTITY CONTROLS =====
+        function changeQty(btn, delta) {
+            const card = btn.closest('.menu-card');
+            const qtyEl = card.querySelector('.qty-value');
+            let qty = parseInt(qtyEl.textContent) + delta;
+            if (qty < 0) qty = 0;
+            qtyEl.textContent = qty;
+
+            const id = card.dataset.id;
+            const name = card.dataset.name;
+            const price = parseFloat(card.dataset.price);
+
+            // Determine size label
+            let size = '';
+            const isBurger = card.classList.contains('burger-card');
+            if (isBurger) {
+                const sizeKey = card.dataset.selectedBurgerSize || 'sencilla';
+                size = sizeKey.charAt(0).toUpperCase() + sizeKey.slice(1);
+                const papasCheckbox = card.querySelector('.papas-checkbox input');
+                if (papasCheckbox && papasCheckbox.checked) size += ' + Papas';
+            } else {
+                const sizeBtn = card.querySelector('.size-btn.active');
+                size = sizeBtn ? sizeBtn.textContent.split(' ')[0] : '';
+            }
+
+            if (qty > 0) {
+                cart[id] = { name, price, qty, size };
+                if (delta > 0) showToast('✅ ' + name + ' agregado');
+            } else {
+                delete cart[id];
+            }
+
+            if (delta > 0) {
+                qtyEl.classList.add('bounce');
+                setTimeout(() => qtyEl.classList.remove('bounce'), 300);
+            }
+
+            updateCartUI();
+        }
+
+        // ===== UPDATE CART UI =====
+        function updateCartUI() {
+            let totalItems = 0;
+            let totalPrice = 0;
+            Object.values(cart).forEach(item => {
+                totalItems += item.qty;
+                totalPrice += item.price * item.qty;
+            });
+            document.getElementById('cartBadge').textContent = totalItems;
+            document.getElementById('cartTotal').textContent = '$' + totalPrice.toFixed(2);
+            document.getElementById('cartFloat').classList.toggle('visible', totalItems > 0);
+        }
+
+        // ===== TOAST =====
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 1500);
+        }
+
+        // ===== OPEN CART =====
+        function openCart() {
+            const modal = document.getElementById('cartModal');
+            const body = document.getElementById('cartModalBody');
+            const items = Object.entries(cart);
+
+            if (items.length === 0) {
+                body.innerHTML = '<div class="empty-cart"><div class="empty-cart-icon">🛒</div><p class="empty-cart-text">Tu carrito está vacío.<br>¡Agrega productos del menú!</p></div>';
+                modal.classList.add('open');
+                return;
+            }
+
+            let subtotal = 0;
+            let itemsHTML = '';
+            items.forEach(([id, item]) => {
+                const itemTotal = item.price * item.qty;
+                subtotal += itemTotal;
+                const sizeLabel = item.size ? ` (${item.size})` : '';
+                itemsHTML += `<div class="cart-item"><div class="cart-item-info"><div class="cart-item-name">${item.qty}x ${item.name}${sizeLabel}</div><div class="cart-item-detail">$${item.price.toFixed(2)} c/u</div></div><div class="cart-item-price">$${itemTotal.toFixed(2)}</div><button class="cart-item-remove" onclick="removeItem('${id}')">✕</button></div>`;
+            });
+
+            const deliveryChecked = deliveryMode === 'delivery' ? 'selected' : '';
+            const pickupChecked = deliveryMode === 'pickup' ? 'selected' : '';
+
+            let zoneOptions = '<option value="">Selecciona tu zona...</option>';
+            Object.entries(DELIVERY_ZONES).forEach(([key, zone]) => {
+                zoneOptions += `<option value="${key}" ${selectedZone === key ? 'selected' : ''}>${zone.name} (+$${zone.price.toFixed(2)})</option>`;
+            });
+
+            const deliveryPrice = (deliveryMode === 'delivery' && selectedZone) ? DELIVERY_ZONES[selectedZone].price : 0;
+            const total = subtotal + deliveryPrice;
+
+            body.innerHTML = `
+                ${itemsHTML}
+                <div class="delivery-section">
+                    <div class="delivery-label">🚚 Tipo de Entrega</div>
+                    <div class="delivery-options">
+                        <div class="delivery-option ${pickupChecked}" onclick="setDeliveryMode('pickup')">
+                            <span class="delivery-option-icon">🏪</span>
+                            <div class="delivery-option-text">Pick Up</div>
+                            <div class="delivery-option-price">Retiro en tienda</div>
+                        </div>
+                        <div class="delivery-option ${deliveryChecked}" onclick="setDeliveryMode('delivery')">
+                            <span class="delivery-option-icon">🛵</span>
+                            <div class="delivery-option-text">Delivery</div>
+                            <div class="delivery-option-price">Desde $1.50</div>
+                        </div>
+                    </div>
+                    <div class="zone-section ${deliveryMode === 'delivery' ? 'visible' : ''}">
+                        <div class="zone-label">📍 Selecciona tu zona:</div>
+                        <select class="zone-select" onchange="setZone(this.value)">${zoneOptions}</select>
+                    </div>
+                </div>
+                <div class="customer-section">
+                    <div class="customer-label">👤 Datos del Cliente</div>
+                    <div class="input-group">
+                        <label>Nombre</label>
+                        <input type="text" id="customerName" placeholder="Tu nombre" value="${window._customerName || ''}">
+                    </div>
+                    <div class="input-group" style="${deliveryMode === 'delivery' ? '' : 'display:none'}">
+                        <label>Dirección de entrega</label>
+                        <textarea id="customerAddress" placeholder="Dirección completa...">${window._customerAddress || ''}</textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>Nota adicional (opcional)</label>
+                        <input type="text" id="customerNote" placeholder="Sin cebolla, extra salsa..." value="${window._customerNote || ''}">
+                    </div>
+                </div>
+                <div class="order-summary">
+                    <div class="summary-row"><span>Subtotal</span><span>$${subtotal.toFixed(2)}</span></div>
+                    ${deliveryMode === 'delivery' && deliveryPrice > 0 ? `<div class="summary-row"><span>Delivery</span><span>$${deliveryPrice.toFixed(2)}</span></div>` : ''}
+                    <div class="summary-row total"><span>TOTAL</span><span>$${total.toFixed(2)}</span></div>
+                </div>
+                <button class="send-whatsapp-btn" onclick="sendWhatsApp()">
+                    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    Enviar Pedido por WhatsApp
+                </button>
+            `;
+            modal.classList.add('open');
+        }
+
+        function closeCart() {
+            const n = document.getElementById('customerName');
+            const a = document.getElementById('customerAddress');
+            const o = document.getElementById('customerNote');
+            if (n) window._customerName = n.value;
+            if (a) window._customerAddress = a.value;
+            if (o) window._customerNote = o.value;
+            document.getElementById('cartModal').classList.remove('open');
+        }
+
+        function removeItem(id) {
+            delete cart[id];
+            const card = document.querySelector(`[data-id="${id}"]`);
+            if (card) card.querySelector('.qty-value').textContent = '0';
+            updateCartUI();
+            openCart();
+        }
+
+        function saveFormData() {
+            const n = document.getElementById('customerName');
+            const a = document.getElementById('customerAddress');
+            const o = document.getElementById('customerNote');
+            if (n) window._customerName = n.value;
+            if (a) window._customerAddress = a.value;
+            if (o) window._customerNote = o.value;
+        }
+
+        function setDeliveryMode(mode) {
+            saveFormData();
+            deliveryMode = mode;
+            if (mode === 'pickup') selectedZone = '';
+            openCart();
+        }
+
+        function setZone(zone) {
+            saveFormData();
+            selectedZone = zone;
+            openCart();
+        }
+
+        // ===== SEND WHATSAPP =====
+        function sendWhatsApp() {
+            const items = Object.entries(cart);
+            if (items.length === 0) { showToast('⚠️ Agrega productos primero'); return; }
+
+            const customerName = document.getElementById('customerName')?.value || '';
+            const customerAddress = document.getElementById('customerAddress')?.value || '';
+            const customerNote = document.getElementById('customerNote')?.value || '';
+
+            if (!customerName.trim()) { showToast('⚠️ Ingresa tu nombre'); return; }
+            if (deliveryMode === 'delivery' && !selectedZone) { showToast('⚠️ Selecciona tu zona'); return; }
+            if (deliveryMode === 'delivery' && !customerAddress.trim()) { showToast('⚠️ Ingresa tu dirección'); return; }
+
+            let msg = '🍔👑 *PEDIDO REYES BURGER* 👑🍔\n';
+            msg += '━━━━━━━━━━━━━━━━━━\n\n';
+
+            let subtotal = 0;
+            items.forEach(([id, item]) => {
+                const itemTotal = item.price * item.qty;
+                subtotal += itemTotal;
+                const sizeLabel = item.size ? ` (${item.size})` : '';
+                msg += `▸ *${item.qty}x* ${item.name}${sizeLabel} — $${itemTotal.toFixed(2)}\n`;
+            });
+
+            msg += '\n━━━━━━━━━━━━━━━━━━\n';
+
+            const deliveryPrice = (deliveryMode === 'delivery' && selectedZone) ? DELIVERY_ZONES[selectedZone].price : 0;
+            const total = subtotal + deliveryPrice;
+
+            msg += `📦 *Subtotal:* $${subtotal.toFixed(2)}\n`;
+            if (deliveryMode === 'delivery') {
+                msg += `🛵 *Delivery (${DELIVERY_ZONES[selectedZone].name}):* $${deliveryPrice.toFixed(2)}\n`;
+            } else {
+                msg += `🏪 *Retiro en Tienda (Pick Up)*\n`;
+            }
+
+            msg += `\n💰 *TOTAL: $${total.toFixed(2)}*\n`;
+            msg += '\n━━━━━━━━━━━━━━━━━━\n';
+            msg += `👤 *Nombre:* ${customerName}\n`;
+            if (deliveryMode === 'delivery') msg += `📍 *Dirección:* ${customerAddress}\n`;
+            if (customerNote.trim()) msg += `📝 *Nota:* ${customerNote}\n`;
+            msg += '\n¡Gracias por su pedido! 🙏';
+
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        // ===== CATEGORY NAV =====
+        document.querySelectorAll('.cat-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const cat = btn.dataset.cat;
+                const sections = document.querySelectorAll('.menu-section');
+                if (cat === 'all') {
+                    sections.forEach(sec => sec.style.display = '');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    sections.forEach(sec => sec.style.display = sec.dataset.category === cat ? '' : 'none');
+                    const target = document.getElementById('sec-' + cat);
+                    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Close modal on overlay click
+        document.getElementById('cartModal').addEventListener('click', function(e) {
+            if (e.target === this) closeCart();
+        });
+
+        // ===== BANNER CAROUSEL =====
+        let currentSlide = 0;
+        const totalSlides = 4;
+        let bannerInterval;
+
+        function goToSlide(index) {
+            currentSlide = index;
+            document.getElementById('bannerTrack').style.transform = `translateX(-${index * 25}%)`;
+            document.querySelectorAll('.banner-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        function nextSlide() {
+            goToSlide((currentSlide + 1) % totalSlides);
+        }
+
+        function startBanner() {
+            bannerInterval = setInterval(nextSlide, 2000);
+        }
+
+        // Pause on touch/hover, resume on release
+        const carousel = document.getElementById('bannerCarousel');
+        carousel.addEventListener('mouseenter', () => clearInterval(bannerInterval));
+        carousel.addEventListener('mouseleave', startBanner);
+        carousel.addEventListener('touchstart', () => clearInterval(bannerInterval), { passive: true });
+        carousel.addEventListener('touchend', () => { startBanner(); });
+
+        // Swipe support
+        let touchStartX = 0;
+        carousel.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+        }, { passive: true });
+
+        carousel.addEventListener('touchend', (e) => {
+            const diff = touchStartX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) goToSlide((currentSlide + 1) % totalSlides);
+                else goToSlide((currentSlide - 1 + totalSlides) % totalSlides);
+            }
+        });
+
+        startBanner();
+    </script>
+</body>
+</html>
